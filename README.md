@@ -17,7 +17,8 @@ Configuration of the deployment code is supported via environment variables. The
 - `WEBTALK_AWS_ELASTIC_IP` - AWS EC2 [elastic ip](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html) to use for the instance launched.
 - `WEBTALK_AWS_INSTANCE_TYPE` - AWS EC2 [instance type](https://aws.amazon.com/ec2/instance-types/) to use for deployment.
 - `WEBTALK_AWS_AMI` - AWS EC2 [machine image](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html) to use for deployment (only tested on Ubuntu 16.04 AMIs).
-- `WEBTALK_SOURCE_URL` - URL to download the application code from.
+- `WEBTALK_SOURCE_URL` - URL to download the application code from. This currently expects a zip archive with all contents in a single top level directory.
+- `WEBTALK_SOURCE_DIR` - Directory name of extracted source archive. For example, the archive of the `master` branch of the Webtalk repository extracts to `webtalk-master`.
 - `WEBTALK_SERVER_NAME` - Server name that the application will be accessible at (e.g. `example.com`).
 - `WEBTALK_ACME_CONTACT` - Contact email address required by the [ACME protocol](https://letsencrypt.org/how-it-works/) for automatically generating certificates from Let's Encrypt.
 - `WEBTALK_LOGTALK_VERSION` - [Logtalk](http://logtalk.org/) version the application is based on.

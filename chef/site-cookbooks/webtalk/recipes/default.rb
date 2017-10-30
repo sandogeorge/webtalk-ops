@@ -83,7 +83,7 @@ end
 
 ## Remove old extracted source.
 bash 'remove_old_source' do
-  code 'rm -rf webtalk-master'
+  code "rm -rf #{ENV['WEBTALK_SOURCE_DIR']}"
   cwd '/srv/www'
 end
 
@@ -107,7 +107,7 @@ template '/etc/systemd/system/webtalk.service' do
       :user => ENV['WEBTALK_USER'],
       :group => ENV['WEBTALK_USER'],
       :webtalk_server_name => ENV['WEBTALK_SERVER_NAME'],
-      :working_dir => '/srv/www/webtalk-master',
+      :working_dir => "/srv/www/#{ENV['WEBTALK_SOURCE_DIR']}",
   })
 end
 
@@ -122,6 +122,6 @@ acme_certificate  ENV['WEBTALK_SERVER_NAME'] do
   crt "/etc/ssl/#{ENV['WEBTALK_SERVER_NAME']}.crt"
   chain "/etc/ssl/#{ENV['WEBTALK_SERVER_NAME']}-chain.crt"
   key "/etc/ssl/#{ENV['WEBTALK_SERVER_NAME']}.key"
-  wwwroot '/srv/www/webtalk-master/app'
+  wwwroot "/srv/www/#{ENV['WEBTALK_SOURCE_DIR']}/app"
   notifies :restart, 'service[webtalk.service]'
 end

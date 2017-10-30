@@ -39,6 +39,7 @@ Vagrant.configure('2') do |config|
     chef.nodes_path = '../chef/nodes'
     chef.data_bags_path = '../chef/data_bags'
     chef.binary_env = 'WEBTALK_SOURCE_URL=' + ENV['WEBTALK_SOURCE_URL'] +
+        ' WEBTALK_SOURCE_DIR=' + ENV['WEBTALK_SOURCE_DIR'] +
         ' WEBTALK_USER=' + USER +
         ' WEBTALK_LOGTALK_VERSION=' + ENV['WEBTALK_LOGTALK_VERSION'] +
         ' WEBTALK_SERVER_NAME=' + ENV['WEBTALK_SERVER_NAME'] +
