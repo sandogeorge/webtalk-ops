@@ -27,12 +27,12 @@ apt_update
 package 'swi-prolog'
 package 'certbot'
 
-acme_selfsigned ENV['WEBTALK_HOST_NAME'] do
-  crt "/etc/ssl/#{ENV['WEBTALK_HOST_NAME']}.crt"
-  chain "/etc/ssl/#{ENV['WEBTALK_HOST_NAME']}-chain.crt"
-  key "/etc/ssl/#{ENV['WEBTALK_HOST_NAME']}.key"
+acme_selfsigned ENV['WEBTALK_SERVER_NAME'] do
+  crt "/etc/ssl/#{ENV['WEBTALK_SERVER_NAME']}.crt"
+  chain "/etc/ssl/#{ENV['WEBTALK_SERVER_NAME']}-chain.crt"
+  key "/etc/ssl/#{ENV['WEBTALK_SERVER_NAME']}.key"
   guard_interpreter :bash
-  not_if "[[ -f /etc/ssl/#{ENV['WEBTALK_HOST_NAME']}.crt ]]"
+  not_if "[[ -f /etc/ssl/#{ENV['WEBTALK_SERVER_NAME']}.crt ]]"
 end
 
 directory '/usr/lib/swi-prolog/pack' do
@@ -83,7 +83,7 @@ end
 
 ## Remove old extracted source.
 bash 'remove_old_source' do
-  code 'rm -rf webtalk-master'
+  code "rm -rf #{ENV['WEBTALK_SOURCE_DIR']}"
   cwd '/srv/www'
 end
 
@@ -106,8 +106,8 @@ template '/etc/systemd/system/webtalk.service' do
       :fork => 'false',
       :user => ENV['WEBTALK_USER'],
       :group => ENV['WEBTALK_USER'],
-      :webtalk_host_name => ENV['WEBTALK_HOST_NAME'],
-      :working_dir => '/srv/www/webtalk-master',
+      :webtalk_server_name => ENV['WEBTALK_SERVER_NAME'],
+      :working_dir => "/srv/www/#{ENV['WEBTALK_SOURCE_DIR']}",
   })
 end
 
@@ -118,10 +118,10 @@ service 'webtalk.service' do
 end
 
 node.set['acme']['contact'] = ["mailto:#{ENV['WEBTALK_ACME_CONTACT']}"]
-acme_certificate  ENV['WEBTALK_HOST_NAME'] do
-  crt "/etc/ssl/#{ENV['WEBTALK_HOST_NAME']}.crt"
-  chain "/etc/ssl/#{ENV['WEBTALK_HOST_NAME']}-chain.crt"
-  key "/etc/ssl/#{ENV['WEBTALK_HOST_NAME']}.key"
-  wwwroot '/srv/www/webtalk-master/app'
+acme_certificate  ENV['WEBTALK_SERVER_NAME'] do
+  crt "/etc/ssl/#{ENV['WEBTALK_SERVER_NAME']}.crt"
+  chain "/etc/ssl/#{ENV['WEBTALK_SERVER_NAME']}-chain.crt"
+  key "/etc/ssl/#{ENV['WEBTALK_SERVER_NAME']}.key"
+  wwwroot "/srv/www/#{ENV['WEBTALK_SOURCE_DIR']}/app"
   notifies :restart, 'service[webtalk.service]'
 end

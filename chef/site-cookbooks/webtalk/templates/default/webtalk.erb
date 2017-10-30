@@ -12,8 +12,8 @@ Environment=WEBTALK_DAEMON_USER=<%= @user %>
 Environment=WEBTALK_DAEMON_GROUP=<%= @group %>
 Environment=WEBTALK_DAEMON_HTTP=true
 Environment=WEBTALK_DAEMON_HTTPS=true
-Environment=WEBTALK_DAEMON_CERTFILE=/etc/ssl/<%= @webtalk_host_name %>.crt
-Environment=WEBTALK_DAEMON_KEYFILE=/etc/ssl/<%= @webtalk_host_name %>.key
+Environment=WEBTALK_DAEMON_CERTFILE=/etc/ssl/<%= @webtalk_server_name %>.crt
+Environment=WEBTALK_DAEMON_KEYFILE=/etc/ssl/<%= @webtalk_server_name %>.key
 Restart=on-failure
 ExecReload=/bin/kill -s HUP $MAINPID
 StartLimitInterval=60
