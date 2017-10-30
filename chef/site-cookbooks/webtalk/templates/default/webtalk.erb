@@ -1,0 +1,26 @@
+[Unit]
+Description=Webtalk Server.
+
+[Service]
+UMask=022
+Environment=LANG=en_US.utf8
+#Environment=WEBTALK_DAEMON_
+Environment=WEBTALK_DAEMONIZE=<%= @daemonize %>
+Environment=WEBTALK_DAEMON_HTTPS_ONLY=<%= @https_only %>
+Environment=WEBTALK_DAEMON_FORK=<%= @fork %>
+Environment=WEBTALK_DAEMON_USER=<%= @user %>
+Environment=WEBTALK_DAEMON_GROUP=<%= @group %>
+Environment=WEBTALK_DAEMON_HTTP=true
+Environment=WEBTALK_DAEMON_HTTPS=true
+Environment=WEBTALK_DAEMON_CERTFILE=/etc/ssl/<%= @webtalk_host_name %>.crt
+Environment=WEBTALK_DAEMON_KEYFILE=/etc/ssl/<%= @webtalk_host_name %>.key
+Restart=on-failure
+ExecReload=/bin/kill -s HUP $MAINPID
+StartLimitInterval=60
+LimitNOFILE=1000
+StartLimitBurst=5
+WorkingDirectory=<%= @working_dir %>
+ExecStart=/usr/bin/swilgt -s app.lgt
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,11 @@
+source 'https://supermarket.chef.io'
+
+## Load cookbooks from the cookbooks directory.
+Dir[File.join(File.dirname(__FILE__), 'cookbooks/**')].each do |path|
+  cookbook File.basename(path), path: path
+end
+
+## Load cookbooks from the site-cookbooks directory.
+Dir[File.join(File.dirname(__FILE__), 'site-cookbooks/**')].each do |path|
+  cookbook File.basename(path), path: path
+end

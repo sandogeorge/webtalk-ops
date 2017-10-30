@@ -1,0 +1,11 @@
+name             'webtalk'
+maintainer       'Sando George'
+maintainer_email 'sando.csc@gmail.com'
+license          'GPL v3'
+description      'Installs/Configures webtalk'
+long_description 'Installs/Configures webtalk'
+version          '0.1.0'
+
+depends 'apt'
+depends 'magic_shell'
+depends 'acme'

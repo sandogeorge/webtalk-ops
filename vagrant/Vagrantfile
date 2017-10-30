@@ -1,0 +1,48 @@
+require 'vagrant-aws'
+
+USER = 'ubuntu'
+
+Vagrant.configure('2') do |config|
+  config.vm.box = 'aws-dummy'
+
+  ## AWS configuration.
+  config.vm.provider :aws do |aws, override|
+    aws.access_key_id = ENV['WEBTALK_AWS_ACCESS_KEY_ID']
+    aws.secret_access_key = ENV['WEBTALK_AWS_SECRET_ACCESS_KEY']
+    aws.keypair_name = ENV['WEBTALK_AWS_KEYPAIR_NAME']
+    aws.region = ENV['WEBTALK_AWS_DEFAULT_REGION']
+    aws.instance_type = ENV['WEBTALK_AWS_INSTANCE_TYPE']
+    aws.elastic_ip = ENV['WEBTALK_AWS_ELASTIC_IP']
+    aws.ami = ENV['WEBTALK_AWS_AMI']
+    aws.tags = {
+        :Name => 'Webtalk'
+    }
+
+    ## SSH configuration.
+    override.ssh.username = USER
+    override.ssh.private_key_path =
+        '~/.ssh/aws/' + ENV['WEBTALK_AWS_KEYPAIR_NAME'] + '.pem'
+  end
+
+  # The path to the Berksfile to use. The default value is "Berksfile" if one
+  # exists, or nil if it does not.
+  config.berkshelf.berksfile_path = "../chef/Berksfile"
+
+  # Enable Berkshelf. If a Berksfile exists or a berksfile_path is given, this
+  # value is automatically set to true. If not, the value is false
+  config.berkshelf.enabled = true
+
+  ## Chef
+  config.vm.provision :chef_zero do |chef|
+    chef.node_name = 'webtalk'
+    chef.roles_path = '../chef/roles'
+    chef.nodes_path = '../chef/nodes'
+    chef.data_bags_path = '../chef/data_bags'
+    chef.binary_env = 'WEBTALK_SOURCE_URL=' + ENV['WEBTALK_SOURCE_URL'] +
+        ' WEBTALK_USER=' + USER +
+        ' WEBTALK_LOGTALK_VERSION=' + ENV['WEBTALK_LOGTALK_VERSION'] +
+        ' WEBTALK_HOST_NAME=' + ENV['WEBTALK_HOST_NAME'] +
+        ' WEBTALK_ACME_CONTACT=' + ENV['WEBTALK_ACME_CONTACT']
+  end
+
+end
